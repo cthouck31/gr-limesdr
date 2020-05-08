@@ -67,6 +67,11 @@ source_impl::source_impl(std::string serial, int channel_mode, const std::string
         device_handler::getInstance().enable_channels(
             stored.device_number, stored.channel_mode, LMS_CH_RX);
     }
+
+    // Register command message port.
+    message_port_register_in(pmt::intern("command"));
+    set_msg_handler(pmt::intern("command"),
+                    boost::bind(&source_impl::_handle_command, this, _1));
 }
 
 source_impl::~source_impl() {
@@ -261,6 +266,119 @@ inline gr::io_signature::sptr source_impl::args_to_io_signature(int channel_numb
         exit(0);
     }
 }
+
+// Handle command requests.
+void source_impl::_handle_command(pmt::pmt_t msg) {
+    pmt::pmt_t key, value;
+    pmt::pmt_t val0, val1;
+    std::string cmd;
+    float param;
+    std::vector<int> chans;
+    int k;
+
+    // Check for a command pair.
+    if (!pmt::is_pair(msg))
+    {
+        std::cerr << "ERROR: " << __func__ << ": Invalid command format (must be pmt::pair)." << std::endl;
+        return;
+    }
+
+    // Get the command name.
+    key   = pmt::car(msg);
+    if (!pmt::is_symbol(key))
+    {
+        std::cerr << "ERROR: " << __func__ << ": Invalid key type (must be pmt::symbol)." << std::endl;
+        return;
+    }
+    cmd   = pmt::symbol_to_string(key);
+
+    // Get value.
+    value = pmt::cdr(msg);
+    if (pmt::is_pair(value))
+    {
+        val0 = pmt::car(value);
+        val1 = pmt::cdr(value);
+        // Check that gain is a number.
+        if (!(pmt::is_real(val0) || pmt::is_integer(val0)))
+        {
+            std::cerr << "ERROR: " << __func__ << ": Invalid command value (must be float)." << std::endl;
+            return;
+        }
+        param = pmt::is_real(val0) ? pmt::to_double(val0) : pmt::to_long(val0);
+
+        // Check that channel is a number.
+        if (!pmt::is_integer(val1))
+        {
+            std::cerr << "ERROR: " << __func__ << ": Invalid command value (must be integer or pmt::symbol)." << std::endl;
+            return;
+        }
+        // Get channel.
+        chans.push_back(pmt::to_long(val1));
+    }
+    else
+    {
+        // Check that gain is a number.
+        if (!(pmt::is_real(value) || pmt::is_integer(value)))
+        {
+            std::cerr << "ERROR: " << __func__ << ": Invalid command value (must be float)." << std::endl;
+            return;
+        }
+        param = pmt::is_real(value) ? pmt::to_double(value) : pmt::to_long(value);
+        chans.push_back(0);
+        chans.push_back(1);
+        chans.push_back(2);
+    }
+
+
+    // Check the type of command.
+    if (cmd.compare("freq") == 0)
+    {
+        //======================================================
+        // Set frequency.
+        for (k = 0; k < chans.size(); k++)
+        {
+            set_center_freq(param, chans[k]);
+        }
+    }
+    else if (cmd.compare("gain") == 0)
+    {
+        //======================================================
+        // Set gain.
+        for (k = 0; k < chans.size(); k++)
+        {
+            set_gain(param, chans[k]);
+        }
+    }
+    else if (cmd.compare("lo_offset") == 0)
+    {
+        //======================================================
+        // Set LO offset.
+        for (k = 0; k < chans.size(); k++)
+        {
+            set_nco(param, chans[k]);
+        }
+    }
+    else if (cmd.compare("bandwidth") == 0)
+    {
+        //======================================================
+        // Set bandwidth.
+        for (k = 0; k < chans.size(); k++)
+        {
+            set_bandwidth(param, chans[k]);
+        }
+    }
+    else if (cmd.compare("rate") == 0)
+    {
+        //======================================================
+        // Set bandwidth.
+        set_sample_rate(param);
+    }
+    else
+    {
+        std::cerr << "ERROR: " << __func__ << ": Invalid command received (" << cmd << ")." << std::endl;
+    }
+};
+
 double source_impl::set_center_freq(double freq, size_t chan) {
     add_tag = true;
     return device_handler::getInstance().set_rf_freq(

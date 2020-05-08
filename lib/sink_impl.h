@@ -58,6 +58,8 @@ class sink_impl : public sink {
 
     void print_stream_stats(int channel);
 
+    void _handle_command(pmt::pmt_t msg);
+
     public:
     sink_impl(std::string serial,
               int channel_mode,
@@ -80,7 +82,7 @@ class sink_impl : public sink {
     void release_stream(int device_number, lms_stream_t* stream);
 
     double set_center_freq(double freq, size_t chan = 0);
-    
+
     void set_antenna(int antenna, int channel = 0);
     void toggle_pa_path(int device_number, bool enable);
 
@@ -99,7 +101,7 @@ class sink_impl : public sink {
     void set_buffer_size(uint32_t size);
 
     void calibrate(double bandw, int channel = 0);
-    
+
     void set_tcxo_dac(uint16_t dacVal = 125);
 };
 } // namespace limesdr

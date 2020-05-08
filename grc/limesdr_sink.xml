@@ -51,7 +51,7 @@ self.$(id).set_nco($nco_freq_ch1,1)
 #end if
 #if $allow_tcxo_dac() == 1
 self.$(id).set_tcxo_dac($dacVal)
-#end if    
+#end if
     </make>
 
     <callback>set_center_freq($rf_freq, 0)</callback>
@@ -66,7 +66,7 @@ self.$(id).set_tcxo_dac($dacVal)
     <callback>set_gain($gain_dB_ch0,0)</callback>
     <callback>set_gain($gain_dB_ch1,1)</callback>
     <callback>set_tcxo_dac($dacVal)</callback>
-    
+
     <param_tab_order>
       <tab>General</tab>
       <tab>Channel A</tab>
@@ -87,7 +87,7 @@ self.$(id).set_tcxo_dac($dacVal)
         <value></value>
         <type>file_open</type>
     </param>
- 
+
     <param>
         <name>Channel</name>
         <key>channel_mode</key>
@@ -106,14 +106,14 @@ self.$(id).set_tcxo_dac($dacVal)
             <key>2</key>
         </option>
     </param>
-  
+
     <param>
         <name>RF Frequency</name>
         <key>rf_freq</key>
         <value>100e6</value>
         <type>float</type>
     </param>
- 
+
     <param>
         <name>Sample Rate</name>
         <key>samp_rate</key>
@@ -127,7 +127,7 @@ self.$(id).set_tcxo_dac($dacVal)
         #end if
         </hide>
     </param>
-  
+
     <param>
         <name>Oversample</name>
         <key>oversample</key>
@@ -169,7 +169,7 @@ self.$(id).set_tcxo_dac($dacVal)
             <key>32</key>
         </option>
     </param>
-    
+
 	<param>
 		<name>DAC Value (TCXO)</name>
 		<key>dacVal</key>
@@ -183,7 +183,7 @@ self.$(id).set_tcxo_dac($dacVal)
 	  #end if
     </hide>
 	</param>
-	
+
     <param>
         <name>Length Tag Name</name>
         <key>length_tag_name</key>
@@ -206,7 +206,7 @@ self.$(id).set_tcxo_dac($dacVal)
     </hide>
     <tab>Channel A</tab>
     </param>
-    
+
     <param>
       <name>Calibration BW</name>
       <key>calibr_bandw_ch0</key>
@@ -223,7 +223,7 @@ self.$(id).set_tcxo_dac($dacVal)
       </hide>
       <tab>Channel A</tab>
     </param>
-  
+
     <param>
         <name>PA Path</name>
         <key>pa_path_ch0</key>
@@ -250,7 +250,7 @@ self.$(id).set_tcxo_dac($dacVal)
         </option>
 	<tab>Channel A</tab>
     </param>
-  
+
     <param>
         <name>Analog Filter BW</name>
         <key>analog_bandw_ch0</key>
@@ -265,8 +265,8 @@ self.$(id).set_tcxo_dac($dacVal)
 	</hide>
 	<tab>Channel A</tab>
     </param>
-  
- 
+
+
     <param>
         <name>Digital Filter BW</name>
         <key>digital_bandw_ch0</key>
@@ -281,7 +281,7 @@ self.$(id).set_tcxo_dac($dacVal)
 	</hide>
 	<tab>Channel A</tab>
     </param>
- 
+
     <param>
         <name>Gain (dB)</name>
         <key>gain_dB_ch0</key>
@@ -296,7 +296,7 @@ self.$(id).set_tcxo_dac($dacVal)
 	</hide>
 	<tab>Channel A</tab>
     </param>
- 
+
     <param>
         <name>NCO Frequency</name>
         <key>nco_freq_ch1</key>
@@ -311,7 +311,7 @@ self.$(id).set_tcxo_dac($dacVal)
 	</hide>
 	<tab>Channel B</tab>
     </param>
-  
+
     <param>
         <name>Calibration BW</name>
         <key>calibr_bandw_ch1</key>
@@ -328,7 +328,7 @@ self.$(id).set_tcxo_dac($dacVal)
 	</hide>
 	<tab>Channel B</tab>
     </param>
-  
+
     <param>
         <name>PA Path</name>
         <key>pa_path_ch1</key>
@@ -351,7 +351,7 @@ self.$(id).set_tcxo_dac($dacVal)
         </option>
 	<tab>Channel B</tab>
     </param>
-  
+
     <param>
         <name>Analog Filter BW</name>
         <key>analog_bandw_ch1</key>
@@ -366,7 +366,7 @@ self.$(id).set_tcxo_dac($dacVal)
 	</hide>
 	<tab>Channel B</tab>
     </param>
-  
+
     <param>
         <name>Digital Filter BW</name>
         <key>digital_bandw_ch1</key>
@@ -381,7 +381,7 @@ self.$(id).set_tcxo_dac($dacVal)
 	</hide>
 	<tab>Channel B</tab>
     </param>
-  
+
     <param>
         <name>Gain (dB)</name>
         <key>gain_dB_ch1</key>
@@ -413,49 +413,54 @@ self.$(id).set_tcxo_dac($dacVal)
         </option>
         <tab>Advanced</tab>
     </param>
-  
+
     <!--<check> $device_type >= $channel_mode-1 </check>-->
     <check> $channel_mode >= 0 </check>
     <check> 2 >= $channel_mode </check>
-  
+
     <check> $rf_freq > 0  </check>
 
     <check> $calibr_bandw_ch0 >= 2.5e6 or $calibr_bandw_ch0 == 0</check>
     <check> 120e6 >= $calibr_bandw_ch0</check>
-  
+
     <check> $calibr_bandw_ch1 >= 2.5e6 or $calibr_bandw_ch1 == 0 </check>
     <check> 120e6 >= $calibr_bandw_ch1</check>
-  
+
     <check> $analog_bandw_ch0 >= 5e6 or $analog_bandw_ch0 == 0 </check>
     <check> 130e6 >= $analog_bandw_ch0</check>
-  
+
     <check> $analog_bandw_ch1 >= 5e6 or $analog_bandw_ch1 == 0</check>
     <check> 130e6 >= $analog_bandw_ch1</check>
- 
+
     <check> $digital_bandw_ch0 >= 0 </check>
     <check> $samp_rate >= $digital_bandw_ch0 or $digital_bandw_ch0 == 0 </check>
-  
+
     <check> $digital_bandw_ch1 >= 0 </check>
     <check> $samp_rate >= $digital_bandw_ch1 or $digital_bandw_ch1 == 0 </check>
-  
+
     <check> $gain_dB_ch0 >= 0 </check>
     <check> 60 >= $gain_dB_ch0 </check>
-  
+
     <check> $gain_dB_ch1 >= 0 </check>
     <check> 60 >= $gain_dB_ch1 </check>
-  
+
     <check> $samp_rate > 0 </check>
     <check> 61.44e6 >= $samp_rate </check>
 
     <!--<check> $txco_dac >= 0 </check>
     <check> 255 > $tcxo_dac </check>-->
-  
+
     <sink>
         <name>in</name>
         <type>complex</type>
         <nports>$channel_mode</nports>
     </sink>
-    
+    <sink>
+        <name>command</name>
+        <type>message</type>
+        <optional>1</optional>
+    </sink>
+
 <doc>
 -------------------------------------------------------------------------------------------------------------------
 DEVICE SERIAL
@@ -520,7 +525,7 @@ Calibration bandwidth range must be [2.5e6,120e6] Hz.
 -------------------------------------------------------------------------------------------------------------------
 PA PATH
 
-Select active power amplifier path of each channel. 
+Select active power amplifier path of each channel.
 For LimeSDR-Mini and LimeNET-Micro Auto(Default) option sets preferred PA path depending on RF frequency.
 For LimeSDR-USB and LimeSDR-PCIe Auto(Default) sets PA path to Band1.
 -------------------------------------------------------------------------------------------------------------------

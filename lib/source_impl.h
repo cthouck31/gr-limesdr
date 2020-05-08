@@ -54,6 +54,8 @@ class source_impl : public source {
 
     void add_time_tag(int channel, lms_stream_meta_t meta);
 
+    void _handle_command(pmt::pmt_t msg);
+
     public:
     source_impl(std::string serial, int channel_mode, const std::string& filename);
     ~source_impl();
@@ -91,7 +93,7 @@ class source_impl : public source {
     void set_buffer_size(uint32_t size);
 
     void calibrate(double bandw, int channel = 0);
-    
+
     void set_tcxo_dac(uint16_t dacVal = 125);
 };
 } // namespace limesdr
